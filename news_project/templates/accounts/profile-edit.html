@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  Profile details
+
+{% endblock %}
+
+{% block content %}
+<section class="user-dashboard page-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="dashboard-wrapper dashboard-user-profile">
+          <div class="media">
+            <div class="pull-left text-center">
+              {% if profile.avatar %}
+                <img class="media-object user-img"
+                     src="{{ profile.avatar.url }}"
+                     alt="{{ profile.user.username }}"
+                     width="150" height="150">
+              {% else %}
+                <img class="media-object user-img"
+                     src="{% static 'images/ava2.webp' %}"
+                     alt="{{ profile.user.username }}"
+                     width="150" height="150">
+              {% endif %}
+              {% if request.user == profile.user %}
+                <a href="{% url 'accounts:user_profile_edit' %}"
+                   class="btn btn-transparent mt-20">
+                  Edit image
+                </a>
+              {% endif %}
+            </div>
+
+            <div class="media-body">
+              {% if request.user == profile.user %}
+                <form method="post" enctype="multipart/form-data" class="user-profile-form">
+                  {% csrf_token %}
+
+                  <ul class="user-profile-list">
+                    <li>
+                      <span>Username:</span>
+                      {{ form.username }}
+                      {{ form.username.errors }}
+                    </li>
+                    <li>
+                      <span>Email:</span>
+                      {{ form.email }}
+                      {{ form.email.errors }}
+                    </li>
+                    <li>
+                      <span>Avatar:</span>
+                      {{ form.avatar }}
+                      {{ form.avatar.errors }}
+                    </li>
+                      <span>Bio:</span>
+                    <li>
+
+                      {{ form.bio }}
+                      {{ form.bio.errors }}
+                    </li>
+                    <li>
+                      <button type="submit" class="btn btn-primary mt-10">
+                        Save changes
+                      </button>
+                        <a href="{% url 'accounts:user_profile' profile.user.username %}"
+           class="btn btn-link">Cancel</a>
+                    </li>
+                  </ul>
+                </form>
+              {% else %}
+                <ul class="user-profile-list">
+                  <li>
+                    <span>Full Name:</span>
+                    {{ profile.user.get_full_name|default:profile.user.username }}
+                  </li>
+                  <li>
+                    <span>Country:</span> Wakanda
+                  </li>
+                  <li>
+                    <span>Email:</span>
+                    <a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a>
+                  </li>
+                  <li>
+                    <span>Bio:</span> {{ profile.bio }}
+                  </li>
+                </ul>
+              {% endif %}
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

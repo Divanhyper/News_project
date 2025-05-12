@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  Profile details
+
+{% endblock %}
+{% block content %}
+
+<style>
+    .avatar-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-position: center center;
+  /* Показывает всю ширину/высоту, обрезая по краям так, чтобы заполнить весь круг */
+  background-size: cover;
+  /* На случай, если нечего обрезать — покажет целиком (с полями по краям) */
+  background-repeat: no-repeat;
+  background-color: #f0f0f0;
+}
+</style>
+
+
+<section class="page-header">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="content">
+					<h1 class="page-name">Dashboard</h1>
+					<ol class="breadcrumb">
+						<li><a href="index.html">Home</a></li>
+						<li class="active">my account</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="user-dashboard page-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+
+
+        <div class="dashboard-wrapper dashboard-user-profile">
+          <div class="media">
+            <div class="pull-left text-center">
+              {% if profile.avatar %}
+              <div class="avatar-circle" style="background-image: url('{{ profile.avatar.url }}');"></div>
+              {% else %}
+                <img class="media-object user-img"
+                     src="{% static 'images/ava2.webp' %}"
+                     alt="{{ profile.user.username }}"
+                     width="150" height="150">
+              {% endif %}
+              {# Ссылка на смену аватарки — без username, потому что менять может только залогиненный пользователь #}
+
+            </div>
+
+            <div class="media-body">
+              <ul class="user-profile-list">
+                <li>
+                  <span>Full Name:</span>
+                  {{ profile.user.get_full_name|default:profile.user.username }}
+                </li>
+                <li>
+                  <span>Country:</span> Wakanda
+                </li>
+                <li>
+                  <span>Email:</span>
+                  <a href="mailto:{{ profile.user.email }}">
+                    {{ profile.user.email }}
+                  </a>
+                </li>
+                <li>
+                  <span>Bio:</span> {{ profile.bio }}
+                </li>
+                  {% if request.user == profile.user %}
+                <a style="margin-top:50px;" href="{% url 'accounts:user_profile_edit' %}"
+                   class="btn btn-main">
+                  Edit image
+                </a>
+              {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<div style="padding:150px;"></div>
+{% endblock %}

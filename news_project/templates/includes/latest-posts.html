@@ -1,0 +1,26 @@
+
+
+
+
+<!-- Widget Latest Posts -->
+	<div class="widget widget-latest-post">
+		<h4 class="widget-title">Latest Posts</h4>
+		{% for article in articles %}
+			<div class="media">
+			  <a class="pull-left" href="{% url 'news:post_detail' article.slug %}">
+				<img class="media-object" src="{% static 'images/blog/post-thumb.jpg' %}" alt="{{ article.title }}">
+			  </a>
+			  <div class="media-body">
+				<h4 class="media-heading">
+				  <a href="{% url 'news:post_detail' article.slug %}">
+					{{ article.title }}
+				  </a>
+				</h4>
+				<p>{{ article.content|truncatewords:20 }}</p>
+			  </div>
+			</div>
+			{% empty %}
+			  <p>No posts available.</p>
+		{% endfor %}
+
+	<!-- End Latest Posts -->

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  {{ article.title }}
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="post post-single">
+
+          <div class="post-thumb">
+            <img class="img-responsive"
+                 src="{{ article.image.url }}"
+                 alt="{{ article.title }}"
+                 width="300"
+                 height="200"
+                 style="object-fit: cover;"
+            >
+          </div>
+
+          <h2 class="post-title">{{ article.title }}</h2>
+
+          <div class="post-meta">
+            <ul>
+              <li><i class="tf-ion-ios-calendar"></i> {{ article.created_at|date:"d, M Y" }}</li>
+              <li><i class="tf-ion-android-person"></i> POSTED BY <a href="{{ article.author.profile.get_absolute_url }}">{{ article.author.username }}</a></li>
+              <li>
+                {% if article.category %}
+                  <a href="{% url 'news:er404' %}"><i class="tf-ion-ios-pricetags"></i> {{ article.category.name }}</a>
+                {% endif %}
+                {% for tag in article.tags.all %}
+                  , <a href="{% url 'news:er404' %}">{{ tag.name }}</a>
+                {% endfor %}
+              </li>
+              <li><a href="#comments"><i class="tf-ion-chatbubbles"></i> {{ comments|length }} Comments</a></li>
+            </ul>
+          </div>
+
+          <div class="post-content post-excerpt">
+            {{ article.content|linebreaks }}
+          </div>
+
+          <div class="post-social-share">
+            <h3 class="post-sub-heading">Share this post</h3>
+            <div class="social-media-icons">
+              <ul>
+                <li><a class="facebook" href="#"><i class="tf-ion-social-facebook"></i></a></li>
+                <li><a class="twitter" href="#"><i class="tf-ion-social-twitter"></i></a></li>
+                <li><a class="dribbble" href="#"><i class="tf-ion-social-dribbble-outline"></i></a></li>
+                <li><a class="instagram" href="#"><i class="tf-ion-social-instagram"></i></a></li>
+                <li><a class="googleplus" href="#"><i class="tf-ion-social-googleplus"></i></a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div id="comments" class="post-comments">
+            <h3 class="post-sub-heading">{{ comments|length }} Comments</h3>
+            <ul class="media-list comments-list m-bot-50 clearlist">
+              {% for comment in comments %}
+              <li class="media">
+                <a class="pull-left" href="#">
+                    {% if comment.user.profile.avatar %}
+                    <img class="media-object comment-avatar" src="{{ comment.user.profile.avatar.url }}" alt="{{ comment.user.username }}" width="50" height="50">
+                {% else %}
+                    <img class="media-object comment-avatar" src="{% static 'images/ava2.webp' %}" alt="{{ comment.user.username }}" width="50" height="50">
+                {% endif %}
+                </a>
+                <div class="media-body">
+                  <div class="comment-info">
+                    <h4 class="comment-author"><a href="{{ comment.user.profile.get_absolute_url }}">{{ comment.user.username }}</a></h4>
+                    <time>{{ comment.created_at|date:"F d, Y \a\t H:i" }}</time>
+                  </div>
+                  <p>{{ comment.content }}</p>
+                </div>
+              </li>
+              {% empty %}
+                <p>No comments yet.</p>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="post-comments-form">
+            <h3 class="post-sub-heading">Leave Your Comments</h3>
+            <form method="post" action="">
+  {% csrf_token %}
+  <div class="row">
+    {% if not user.is_authenticated %}
+      <div class="col-md-6 form-group">
+        <input type="text" name="name" class="form-control" placeholder="Name *" maxlength="100">
+      </div>
+      <div class="col-md-6 form-group">
+        <input type="email" name="email" class="form-control" placeholder="Email *" maxlength="100">
+      </div>
+    {% else %}
+      {# Скрытые поля, чтобы заполнить их автоматически #}
+      <input type="hidden" name="name" value="{{ user.get_full_name|default:user.username }}">
+      <input type="hidden" name="email" value="{{ user.email }}">
+    {% endif %}
+    <div class="form-group col-md-12">
+      <textarea name="content" class="form-control" rows="6" placeholder="Comment" maxlength="400"></textarea>
+    </div>
+    <div class="form-group col-md-12">
+      <button type="submit" class="btn btn-small btn-main">Send comment</button>
+    </div>
+  </div>
+</form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

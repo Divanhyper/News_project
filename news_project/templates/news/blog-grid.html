@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  Новости
+{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="content">
+          <h1 class="page-name">Blog</h1>
+          <ol class="breadcrumb">
+            <li><a href="{% url 'news:index' %}">Home</a></li>
+            <li class="active">blog</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="page-wrapper">
+  <div class="container">
+    <!-- Posts Row -->
+    <div class="row">
+      {% for article in articles %}
+        <div class="col-md-6">
+          <div class="post">
+            <div class="post-thumb">
+              <a href="{% url 'news:post_detail' article.slug %}">
+                <img class="img-responsive" src="{{ article.image.url }}" alt="{{ article.title }}"
+                  width="600"
+                 height="400"
+                 style="object-fit: cover;">
+              </a>
+            </div>
+            <h2 class="post-title"><a href="{% url 'news:post_detail' article.slug %}">{{ article.title }}</a></h2>
+            <div class="post-meta">
+              <ul>
+                <li><i class="tf-ion-ios-calendar"></i> {{ article.created_at|date:"d, M Y" }}</li>
+                <li><i class="tf-ion-android-person"></i> POSTED BY {{ article.author }}</li>
+                <li><a href="#"><i class="tf-ion-ios-pricetags"></i> {{ article.category.name }}</a></li>
+                <li><a href="#"><i class="tf-ion-chatbubbles"></i> {{ article.comment_count }} COMMENTS</a></li>
+              </ul>
+            </div>
+            <div class="post-content">
+              <p>{{ article.content|truncatewords:20 }}</p>
+              <a href="{% url 'news:post_detail' article.slug %}" class="btn btn-main">Continue Reading</a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-md-12"><p>No posts found.</p></div>
+      {% endfor %}
+      {# Если после цикла остался один пустой слот, добавляем пустой столбец #}
+      {% if articles|length|divisibleby:2 == False %}
+        <div class="col-md-6"></div>
+      {% endif %}
+    </div><!-- /.row -->
+
+    <!-- Pagination Row -->
+    {% if page_obj.has_other_pages %}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="text-center">
+            <ul class="pagination post-pagination">
+              {% if page_obj.has_previous %}
+                <li><a href="?page={{ page_obj.previous_page_number }}">Prev</a></li>
+              {% else %}
+                <li class="disabled"><span>Prev</span></li>
+              {% endif %}
+
+              {% for i in page_obj.paginator.page_range %}
+                {% if page_obj.number == i %}
+                  <li class="active"><span>{{ i }}</span></li>
+                {% else %}
+                  <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+              {% endfor %}
+
+              {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+              {% else %}
+                <li class="disabled"><span>Next</span></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+  </div><!-- /.container -->
+</div><!-- /.page-wrapper -->
+{% endblock %}

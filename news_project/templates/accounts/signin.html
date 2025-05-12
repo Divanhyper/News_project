@@ -1,0 +1,46 @@
+{% extends "design.html" %}
+{% load static %}
+{% block title %}
+  Войти в аккаунт
+{% endblock %}
+
+{% block content %}
+<section class="signin-page account">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="block text-center">
+          <a class="logo" href="{% url 'news:index' %}">
+            <img src="{% static 'images/logo.jpg' %}" alt="">
+          </a>
+          <h2 class="text-center">Create Your Account</h2>
+          <form method="post" class="text-left clearfix" action="{% url 'accounts:user_signup' %}">
+            {% csrf_token %}
+            <div class="form-group">
+          <input type="text" class="form-control" name="username" placeholder="Username">
+          {{ form.username.errors }}
+        </div>
+        <div class="form-group">
+          <input type="email" class="form-control" name="email" placeholder="Email">
+          {{ form.email.errors }}
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" name="password1" placeholder="Password">
+          {{ form.password1.errors }}
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" name="password2" placeholder="Confirm Password">
+          {{ form.password2.errors }}
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-main text-center">Sign Up</button>
+        </div>
+      </form>
+      <p class="mt-20">Already have an account? <a href="{% url 'accounts:user_login' %}"> Login</a></p>
+    </div>
+  </div>
+</div>
+  </div>
+</section>
+
+{% endblock %}

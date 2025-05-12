@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  Homepage
+{% endblock %}
+
+
+{% block content %}
+
+
+
+
+<div class="hero-slider">
+	{% for article in articles %}
+	<div class="slider-item th-fullpage hero-area" style="background-image: url({% static 'images/red_bull.png' %});">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 text-center">
+          <p data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".1">Last Posts</p>
+          <h1 data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".5">{{article.title|truncatewords:20|slice:":10"}}<br>{{article.title|truncatewords:20|slice:"10:"}}</h1>
+          <a data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".8" class="btn" href="{% url 'news:post_detail' article.slug %}">Read article</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+	{% endfor %}
+
+</div>
+
+
+<section class="product-category section">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="title text-center">
+					<h2>Article Category</h2>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="category-box">
+					<a href="#!">
+						<img src="{% static 'images/red_bull.png' %}" alt="" />
+						<div class="content">
+							<h3>Category1</h3>
+							<p>info</p>
+						</div>
+					</a>
+				</div>
+				<div class="category-box">
+					<a href="#!">
+						<img src="{% static 'images/red_bull.png' %}" alt="" />
+						<div class="content">
+							<h3>Category2</h3>
+							<p>info</p>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="category-box category-box-2">
+					<a href="#!">
+						<img src="{% static 'images/red_bull.png' %}" alt="" />
+						<div class="content">
+							<h3>Category3</h3>
+							<p>info</p>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!--
+Start Call To Action
+==================================== -->
+<section class="call-to-action bg-gray section">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<div class="title">
+					<h2>SUBSCRIBE TO NEWSLETTER</h2>
+					<p>Get our newest AI generated news first!</p>
+				</div>
+				<div class="col-lg-6 col-md-offset-3">
+				    <div class="input-group subscription-form">
+				      <input type="text" class="form-control" placeholder="Enter Your Email Address">
+				      <span class="input-group-btn">
+				        <button class="btn btn-main" type="button">Subscribe Now!</button>
+				      </span>
+				    </div><!-- /input-group -->
+			  </div><!-- /.col-lg-6 -->
+
+			</div>
+		</div> 		<!-- End row -->
+	</div>   	<!-- End container -->
+</section>   <!-- End section -->
+
+
+
+{% endblock %}

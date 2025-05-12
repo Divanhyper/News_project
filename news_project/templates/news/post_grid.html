@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  News
+{% endblock %}
+
+{% block content %}
+
+<style>
+  /* Стили для карточек постов с равной высотой */
+  .row-eq-height {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .equal-height-post {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 20px;
+  }
+
+  .post-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .post-excerpt {
+    flex-grow: 1;
+  }
+
+  .read-more-wrapper {
+    margin-top: auto;
+    padding-top: 15px;
+  }
+
+  .post-meta ul li i {
+    margin-right: 8px; /* Увеличенный отступ после иконок */
+  }
+
+  .col-md-6 {
+    margin-bottom: 30px;
+  }
+</style>
+
+<section class="page-header">
+    <div class="container">
+       <div class="row">
+          <div class="col-md-12">
+             <div class="content">
+                <h1 class="page-name">Blog</h1>
+                <ol class="breadcrumb">
+                   <li><a href="{% url 'news:index' %}">Home</a></li>
+                   <li class="active">News</li>
+                </ol>
+             </div>
+          </div>
+       </div>
+    </div>
+</section>
+
+<div class="page-wrapper">
+    <div class="container">
+       {% for article in articles %}
+          {% if forloop.first or forloop.counter0|divisibleby:2 %}
+          <div class="row row-eq-height">
+          {% endif %}
+
+            <div class="col-md-6">
+               <div class="post equal-height-post">
+                 <div class="post-thumb">
+                   <a href="{% url 'news:post_detail' article.slug %}">
+                     <img class="img-responsive" src="{% static 'images/blog/red_bull.png' %}" alt="">
+                   </a>
+                 </div>
+                 <h2 class="post-title"><a href="{% url 'news:post_detail' article.slug %}">{{ article.title }}</a></h2>
+                 <div class="post-meta">
+                   <ul>
+                     <li>
+                       <i class="tf-ion-ios-calendar"></i>  {{ article.created_at|date:"d, M Y" }}
+                     </li>
+                     <li>
+                       <i class="tf-ion-android-person"></i> POSTED BY {{ article.author }}
+                     </li>
+                     <li><a href="#"><i class="tf-ion-ios-pricetags"></i> {{ article.category.name }}</a></li>
+                     <li>
+                       <a href="#!"><i class="tf-ion-chatbubbles"></i>{{ article.comment_count }} COMMENTS</a>
+                     </li>
+                   </ul>
+                 </div>
+                 <div class="post-content">
+                   <p class="post-excerpt">{{ article.content|truncatewords:30 }} </p>
+                   <div class="read-more-wrapper">
+                     <a href="{% url 'news:post_detail' article.slug %}" class="btn btn-main">Continue Reading</a>
+                   </div>
+                 </div>
+               </div>
+            </div>
+
+          {% if forloop.last or forloop.counter|divisibleby:2 %}
+          </div><!-- End row -->
+          {% endif %}
+       {% empty %}
+          <div class="row">
+            <div class="col-md-12">
+              <p>No posts found.</p>
+            </div>
+          </div>
+       {% endfor %}
+    </div>
+</div>
+
+<div class="text-center">
+  {% if page_obj.has_other_pages %}
+    <ul class="pagination post-pagination justify-content-center">
+      {# Prev #}
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+            Prev
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Prev</span>
+        </li>
+      {% endif %}
+
+      {# Номера страниц #}
+      {% for i in page_obj.paginator.page_range %}
+        {% if page_obj.number == i %}
+          <li class="page-item active" aria-current="page">
+            <span class="page-link">{{ i }}</span>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {# Next #}
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+            Next
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Next</span>
+        </li>
+      {% endif %}
+    </ul>
+  {% endif %}
+</div>
+
+{% endblock %}
