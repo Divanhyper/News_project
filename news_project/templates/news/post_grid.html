@@ -73,7 +73,7 @@
                <div class="post equal-height-post">
                  <div class="post-thumb">
                    <a href="{% url 'news:post_detail' article.slug %}">
-                     <img class="img-responsive" src="{% static 'images/blog/red_bull.png' %}" alt="">
+                     <img class="img-responsive" src="{{ article.image.url }}" alt="">
                    </a>
                  </div>
                  <h2 class="post-title"><a href="{% url 'news:post_detail' article.slug %}">{{ article.title }}</a></h2>

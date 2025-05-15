@@ -72,6 +72,7 @@ class ProfileDetailView(DetailView):
 
     def get_object(self):
         username = self.kwargs.get('username')
+        print("Получен username:", username)
         user = get_object_or_404(User, username=username)
         return get_object_or_404(Profile, user=user)
 
