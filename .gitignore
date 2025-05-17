@@ -1,0 +1,60 @@
+
+# --- Общие системные файлы ---
+.DS_Store           # macOS
+.thumbs.db          # Windows
+.idea/              # JetBrains IDE
+.vscode/            # VS Code
+*.swp               # Vim swap files
+*.swo
+
+# --- Логи и кэш ---
+*.log
+*.cache
+*.pid
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+.env                # Локальные переменные окружения
+.env.local
+.env.*
+pip-selfcheck.json
+
+# --- БД и хранилища ---
+*.db
+*.sqlite
+*.sqlite3
+/db.sqlite3
+/data/              # Папка с пользовательскими данными
+/media/             # Загруженные файлы (аватарки, посты)
+/staticfiles/       # Собранные статические файлы (если Django)
+/static/       # Собранные статические файлы (если Django)
+# --- Node.js / Frontend ---
+node_modules/
+dist/
+build/
+.npm
+.yarn-integrity
+*.tgz
+
+# --- Тесты и покрытие кода ---
+.coverage
+htmlcov/
+.pytest_cache/
+test-reports/
+
+# --- Деплой / Сборка ---
+*.tar.gz
+*.whl
+.aws/
+.serverless/
+
+# --- IDE-специфичные файлы ---
+.ropeproject

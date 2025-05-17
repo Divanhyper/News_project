@@ -1,9 +1,9 @@
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, TemplateView, DetailView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, FormView
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
 
 from .forms import RegistrationForm, UserLoginForm, ProfileForm, ProfileAndUserForm
@@ -14,16 +14,22 @@ User = get_user_model()
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/signin.html'
 
-class UserRegisterView(CreateView):
-    form_class = RegistrationForm
+class UserRegisterView(FormView):
     template_name = 'accounts/signin.html'
+    form_class = RegistrationForm
     success_url = reverse_lazy('news:index')
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        # self.object is the newly created User
-        login(self.request, self.object)
-        return response
+        # Create and save the new user
+        user = form.save(commit=False)
+        user.email = form.cleaned_data['email']
+        user.save()
+
+        # Optionally, you can create the Profile here if using a signal isn't preferred
+        # from .models import Profile
+        Profile.objects.create(user=user)
+
+        return super().form_valid(form)
 
 class UserLoginView(LoginView):
     form_class = UserLoginForm

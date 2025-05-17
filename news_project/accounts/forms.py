@@ -6,25 +6,18 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class RegistrationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(required=True, label="Email")
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ("username", "email", "password1", "password2")
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.email = self.cleaned_data['email']
-        if commit:
-            user.save()
-            # Создаём связанный профиль сразу после сохранения пользователя
-            Profile.objects.create(user=user)
-        return user
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('bio', 'avatar')
+
 
 class ProfileAndUserForm(forms.ModelForm):
     # Поля «избыточные» для User
